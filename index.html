@@ -4,9 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>really cool flash game</title>
+  <title>My Game Library</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -14,11 +18,34 @@
       height: 100%;
       overflow: hidden;
       background: black;
+      color: white;
+      font-family: Arial, sans-serif;
     }
 
-    #game-container {
-      position: fixed;
-      inset: 0;
+    #menu {
+      height: 50px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      background: #181818;
+      border-bottom: 1px solid #333;
+    }
+
+    #game-select {
+      background: #303030;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 5px;
+      padding: 8px 15px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    #game-area {
+      width: 100%;
+      height: calc(100% - 50px);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -27,21 +54,18 @@
 
     ruffle-player {
       display: block;
-      width: 640px;
-      height: 480px;
-      max-width: 100vw;
-      max-height: 100vh;
+      background: black;
       border: none;
     }
   </style>
 
   <script>
     window.RufflePlayer = window.RufflePlayer || {};
+
     window.RufflePlayer.config = {
       autoplay: "on",
       scale: "showAll",
       forceScale: false,
-      quality: "high",
       letterbox: "on",
       backgroundColor: "#000000"
     };
@@ -51,21 +75,92 @@
 </head>
 
 <body>
-  <div id="game-container"></div>
+
+  <div id="menu">
+    <label for="game-select">Choose a game:</label>
+
+    <select id="game-select">
+      <option value="temple">Temple of Boom</option>
+      <option value="sonic">Sonic</option>
+      <option value="mario">Mario</option>
+    </select>
+  </div>
+
+  <div id="game-area"></div>
 
   <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      const container = document.getElementById("game-container");
-      const ruffle = window.RufflePlayer.newest();
-      const player = ruffle.createPlayer();
+    // List of available games
+    const games = {
+      temple: "https://cdn.jsdelivr.net/gh/bubbls/UGS-file-encryption@main/temple-of-boom.swf",
 
-      container.appendChild(player);
+      sonic: "games/sonic.swf",
 
-      player.load(
-        "https://cdn.jsdelivr.net/gh/bubbls/UGS-file-encryption@main/temple-of-boom.swf"
+      mario: "games/mario.swf"
+    };
+
+    const gameArea = document.getElementById("game-area");
+    const gameSelect = document.getElementById("game-select");
+
+    let player = null;
+
+    function resizeGame() {
+      if (!player) return;
+
+      const availableWidth = window.innerWidth;
+      const availableHeight = window.innerHeight - 50;
+
+      const aspectRatio = 4 / 3;
+
+      let width = Math.min(
+        640,
+        availableWidth,
+        availableHeight * aspectRatio
       );
+
+      let height = width / aspectRatio;
+
+      player.style.width = Math.floor(width) + "px";
+      player.style.height = Math.floor(height) + "px";
+    }
+
+    async function loadGame(gameId) {
+      const url = games[gameId];
+
+      if (!url || !player) return;
+
+      try {
+        await player.load(url);
+        resizeGame();
+      } catch (error) {
+        console.error("Game failed to load:", error);
+        alert("Unable to load this game. Check the SWF file.");
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const ruffle = window.RufflePlayer?.newest();
+
+      if (!ruffle) {
+        gameArea.textContent = "Ruffle failed to load.";
+        return;
+      }
+
+      player = ruffle.createPlayer();
+
+      gameArea.appendChild(player);
+
+      resizeGame();
+
+      gameSelect.addEventListener("change", () => {
+        loadGame(gameSelect.value);
+      });
+
+      loadGame("temple");
     });
+
+    window.addEventListener("resize", resizeGame);
   </script>
+
 </body>
 </html>
 ```
