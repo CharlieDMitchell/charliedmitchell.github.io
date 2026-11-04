@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>My Game Library</title>
 
   <style>
@@ -26,8 +27,8 @@
       height: 50px;
       width: 100%;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       gap: 12px;
       background: #181818;
       border-bottom: 1px solid #333;
@@ -44,34 +45,21 @@
     }
 
     #game-area {
-      width: 100%;
       height: calc(100% - 50px);
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
       background: black;
     }
 
-    ruffle-player {
-      display: block;
-      background: black;
+    #game-frame {
+      width: 100%;
+      height: 100%;
       border: none;
+      background: black;
     }
   </style>
-
-  <script>
-    window.RufflePlayer = window.RufflePlayer || {};
-
-    window.RufflePlayer.config = {
-      autoplay: "on",
-      scale: "showAll",
-      forceScale: false,
-      letterbox: "on",
-      backgroundColor: "#000000"
-    };
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js"></script>
 </head>
 
 <body>
@@ -80,85 +68,39 @@
     <label for="game-select">Choose a game:</label>
 
     <select id="game-select">
-      <option value="temple">Temple of Boom</option>
-      <option value="sonic">Sonic</option>
-      <option value="mario">Mario</option>
+      <option value="">Select a game</option>
+      <option value="games/game1/index.html">Game 1</option>
+      <option value="games/game2/index.html">Game 2</option>
+      <option value="games/game3/index.html">Game 3</option>
     </select>
   </div>
 
-  <div id="game-area"></div>
+  <div id="game-area">
+    <iframe
+      id="game-frame"
+      allow="autoplay; fullscreen"
+      allowfullscreen
+      title="Game window"
+      style="display: none;">
+    </iframe>
+  </div>
 
   <script>
-    // List of available games
-    const games = {
-      temple: "https://cdn.jsdelivr.net/gh/bubbls/UGS-file-encryption@main/temple-of-boom.swf",
-
-      sonic: "games/sonic.swf",
-
-      mario: "games/mario.swf"
-    };
-
-    const gameArea = document.getElementById("game-area");
     const gameSelect = document.getElementById("game-select");
+    const gameFrame = document.getElementById("game-frame");
 
-    let player = null;
+    gameSelect.addEventListener("change", function () {
+      const game = this.value;
 
-    function resizeGame() {
-      if (!player) return;
-
-      const availableWidth = window.innerWidth;
-      const availableHeight = window.innerHeight - 50;
-
-      const aspectRatio = 4 / 3;
-
-      let width = Math.min(
-        640,
-        availableWidth,
-        availableHeight * aspectRatio
-      );
-
-      let height = width / aspectRatio;
-
-      player.style.width = Math.floor(width) + "px";
-      player.style.height = Math.floor(height) + "px";
-    }
-
-    async function loadGame(gameId) {
-      const url = games[gameId];
-
-      if (!url || !player) return;
-
-      try {
-        await player.load(url);
-        resizeGame();
-      } catch (error) {
-        console.error("Game failed to load:", error);
-        alert("Unable to load this game. Check the SWF file.");
-      }
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      const ruffle = window.RufflePlayer?.newest();
-
-      if (!ruffle) {
-        gameArea.textContent = "Ruffle failed to load.";
+      if (!game) {
+        gameFrame.style.display = "none";
+        gameFrame.src = "about:blank";
         return;
       }
 
-      player = ruffle.createPlayer();
-
-      gameArea.appendChild(player);
-
-      resizeGame();
-
-      gameSelect.addEventListener("change", () => {
-        loadGame(gameSelect.value);
-      });
-
-      loadGame("temple");
+      gameFrame.src = game;
+      gameFrame.style.display = "block";
     });
-
-    window.addEventListener("resize", resizeGame);
   </script>
 
 </body>
