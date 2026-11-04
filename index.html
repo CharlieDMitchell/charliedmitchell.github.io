@@ -20,15 +20,17 @@
       position: fixed;
       inset: 0;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       background: black;
     }
 
     ruffle-player {
       display: block;
-      width: 100%;
-      height: 100%;
+      width: 640px;
+      height: 480px;
+      max-width: 100vw;
+      max-height: 100vh;
       border: none;
     }
   </style>
@@ -39,7 +41,7 @@
       autoplay: "on",
       scale: "showAll",
       forceScale: false,
-      quality: "low",
+      quality: "high",
       letterbox: "on",
       backgroundColor: "#000000"
     };
@@ -57,28 +59,7 @@
       const ruffle = window.RufflePlayer.newest();
       const player = ruffle.createPlayer();
 
-      const aspectRatio = 4 / 3;
-
-      function resizeGame() {
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
-
-        let width = screenHeight * aspectRatio;
-        let height = screenHeight;
-
-        if (width > screenWidth) {
-          width = screenWidth;
-          height = screenWidth / aspectRatio;
-        }
-
-        player.style.width = `${Math.floor(width)}px`;
-        player.style.height = `${Math.floor(height)}px`;
-      }
-
       container.appendChild(player);
-      resizeGame();
-
-      window.addEventListener("resize", resizeGame);
 
       player.load(
         "https://cdn.jsdelivr.net/gh/bubbls/UGS-file-encryption@main/temple-of-boom.swf"
