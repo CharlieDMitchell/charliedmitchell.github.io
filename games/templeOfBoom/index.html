@@ -1,68 +1,71 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Temple of Boom</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>really cool flash game</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
       height: 100%;
-      background: black;
       overflow: hidden;
+      background: black;
     }
 
-    #flash-container {
+    #game-container {
       position: fixed;
-      width: min(100vw, 133.333vh);
-      height: min(75vw, 100vh);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background: black;
     }
 
     ruffle-player {
       display: block;
-      width: 100% !important;
-      height: 100% !important;
+      width: 640px;
+      height: 480px;
+      max-width: 100vw;
+      max-height: 100vh;
+      border: none;
     }
   </style>
+
+  <script>
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.RufflePlayer.config = {
+      autoplay: "on",
+      scale: "showAll",
+      forceScale: false,
+      quality: "high",
+      letterbox: "on",
+      backgroundColor: "#000000"
+    };
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js"></script>
 </head>
 
 <body>
-  <div id="flash-container"></div>
+  <div id="game-container"></div>
 
   <script>
-    window.addEventListener("load", async () => {
-      const container = document.getElementById("flash-container");
-      const ruffle = window.RufflePlayer?.newest();
-
-      if (!ruffle) {
-        container.textContent = "Ruffle failed to load.";
-        return;
-      }
-
+    window.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("game-container");
+      const ruffle = window.RufflePlayer.newest();
       const player = ruffle.createPlayer();
-
-      player.style.width = "100%";
-      player.style.height = "100%";
 
       container.appendChild(player);
 
-      await player.load(
+      player.load(
         "https://cdn.jsdelivr.net/gh/bubbls/UGS-file-encryption@main/temple-of-boom.swf"
       );
     });
   </script>
 </body>
 </html>
+```
