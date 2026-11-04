@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>really cool flash game</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Temple of Boom</title>
 
   <style>
     html, body {
@@ -11,52 +13,56 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden;
       background: black;
+      overflow: hidden;
     }
 
-    #game-container {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    #flash-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(100vw, 133.333vh);
+      height: min(75vw, 100vh);
       background: black;
     }
 
     ruffle-player {
       display: block;
-      width: 640px;
-      height: 480px;
-      max-width: 100vw;
-      max-height: 100vh;
-      border: none;
+      width: 100%;
+      height: 100%;
+      background: black;
     }
   </style>
-
-  <script>
-    window.RufflePlayer = window.RufflePlayer || {};
-    window.RufflePlayer.config = {
-      autoplay: "on",
-      scale: "showAll",
-      forceScale: false,
-      quality: "high",
-      letterbox: "on",
-      backgroundColor: "#000000"
-    };
-  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js"></script>
 </head>
 
 <body>
-  <div id="game-container"></div>
+  <div id="flash-container"></div>
 
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      const container = document.getElementById("game-container");
-      const ruffle = window.RufflePlayer.newest();
+      const container = document.getElementById("flash-container");
+      const ruffle = window.RufflePlayer?.newest();
+
+      if (!ruffle) {
+        container.textContent = "Ruffle failed to load.";
+        return;
+      }
+
       const player = ruffle.createPlayer();
+
+      player.config = {
+        scale: "exactFit",
+        forceScale: true,
+        forceAlign: true,
+        align: "C"
+      };
+
+      player.style.width = "100%";
+      player.style.height = "100%";
+      player.style.background = "black";
 
       container.appendChild(player);
 
