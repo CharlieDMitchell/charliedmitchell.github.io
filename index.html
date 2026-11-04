@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>My Game Library</title>
 
   <style>
@@ -25,10 +24,9 @@
 
     #menu {
       height: 50px;
-      width: 100%;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       gap: 12px;
       background: #181818;
       border-bottom: 1px solid #333;
@@ -45,8 +43,8 @@
     }
 
     #game-area {
-      height: calc(100% - 50px);
       width: 100%;
+      height: calc(100% - 50px);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -69,9 +67,7 @@
 
     <select id="game-select">
       <option value="">Select a game</option>
-      <option value="games/game1/index.html">Game 1</option>
-      <option value="games/game2/index.html">Game 2</option>
-      <option value="games/game3/index.html">Game 3</option>
+      <option value="games/temple-of-boom/index.html">Temple of Boom</option>
     </select>
   </div>
 
@@ -80,7 +76,6 @@
       id="game-frame"
       allow="autoplay; fullscreen"
       allowfullscreen
-      title="Game window"
       style="display: none;">
     </iframe>
   </div>
