@@ -56,11 +56,24 @@
       border: none;
       background: black;
     }
+    
+    #status-message {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      color: white;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 8px 12px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      z-index: 10000;
+      pointer-events: none;
+    }
   </style>
 </head>
 
 <body>
-
+  <div id="status-message">Games do not currentely work on chromebooks or other linux devices</div>
   <div id="menu">
     <label for="game-select">Choose a game:</label>
 
